@@ -33,9 +33,7 @@ public class TodoService {
     }
 
     public String deleteTodo(UUID sessionId, int todoId){
-
-        int user_id = sessionDB.findById(sessionId).get().getUserId();
-        if(sessionDB.findById(sessionId).get().getUserId() == todoDB.findById(todoId).get().getUserId()){
+        if(checkTodoId(sessionId, todoId)){
             todoDB.deleteById(todoId);
             return "ok";
         }
@@ -43,4 +41,24 @@ public class TodoService {
             return "wrong todoId";
     }
 
+    public String shareTodo(UUID sessionId, String recipientUsername, int todoId) {
+        if(!checkTodoId(sessionId,todoId))
+            return "wrong todoId";
+
+        var possibleRecipient = userDB.findByUsername(recipientUsername);
+        if(possibleRecipient.isEmpty())
+            return "wrong recipientUsername";
+
+        Todo sharedTodo = todoDB.findById(todoId).get();
+        Todo newTodo = new Todo(sharedTodo);
+
+
+        todoDB.save(newTodo);
+
+        return "ok";
+    }
+
+    private boolean checkTodoId(UUID sessionId, int todoId){
+        return sessionDB.findById(sessionId).get().getUserId() == todoDB.findById(todoId).get().getUserId();
+    }
 }

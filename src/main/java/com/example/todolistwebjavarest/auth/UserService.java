@@ -15,15 +15,15 @@ public class UserService {
     }
 
     public String register(User newUser){
-        if(userDB.findByName(newUser.getUsername()).isPresent())
+        if(userDB.findByUsername(newUser.getUsername()).isPresent())
             return "Nickname is already taken";
         userDB.save(newUser);
         return "ok";
     }
 
     public String login(User user){
-        Optional<User> possibleUser = userDB.findByName(user.getUsername());
-        if(userDB.findByName(user.getUsername()).isEmpty())
+        Optional<User> possibleUser = userDB.findByUsername(user.getUsername());
+        if(userDB.findByUsername(user.getUsername()).isEmpty())
             return "No user with this nickname";
 
         if(!possibleUser.get().getPassword().equals(user.getPassword()))

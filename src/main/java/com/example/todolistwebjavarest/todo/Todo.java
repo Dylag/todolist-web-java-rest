@@ -13,7 +13,7 @@ public class Todo {
     private int id;
 
     @Column(name = "txt")
-    private String txt;
+    private String text;
 
     @Column(name = "startdate")
     private Date startdate;
@@ -24,6 +24,17 @@ public class Todo {
     @Column(name = "user_id")
     private int userId;
 
+    public Todo(Todo originalTodo){
+        text = originalTodo.getText();
+        startdate = originalTodo.getStartdate();
+        enddate= originalTodo.getEnddate();
+        userId = originalTodo.getUserId();
+    }
+
+    public Todo() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -32,12 +43,12 @@ public class Todo {
         this.id = id;
     }
 
-    public String getTxt() {
-        return txt;
+    public String getText() {
+        return text;
     }
 
-    public void setTxt(String txt) {
-        this.txt = txt;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Date getStartdate() {
