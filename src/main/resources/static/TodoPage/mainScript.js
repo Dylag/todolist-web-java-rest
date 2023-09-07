@@ -43,18 +43,25 @@ function addToList(){
 
             let newDeleteBtnCell = document.createElement('td')
             newDeleteBtnCell.className = "deleteBtnColumn"
-
             let newDeleteBtn = document.createElement('button')
             newDeleteBtn.textContent = "---"
-            newDeleteBtn.className = "deleteBtnColumn"
             newDeleteBtn.onclick = (()=>removeElement(newRow,newTodo.id))
             newDeleteBtnCell.appendChild(newDeleteBtn)
+
+            let newShareBtnCell = document.createElement("td")
+            newShareBtnCell.className = "shareBtnColumn"
+            let newShareBtn = document.createElement('button')
+            newShareBtn.textContent = "share with..."
+            newShareBtn.onclick = (() => shareTodo(newTodo.id))
+            newShareBtnCell.appendChild(newShareBtn)
+
 
             newRow.appendChild(newIdCell)
             newRow.appendChild(newTxtCell)
             newRow.appendChild(newStartDateCell)
             newRow.appendChild(newEndDateCell)
-            newRow.appendChild(newDeleteBtn)
+            newRow.appendChild(newDeleteBtnCell)
+            newRow.appendChild(newShareBtnCell)
 
             table.appendChild(newRow)
 
@@ -74,4 +81,14 @@ function removeElement(element,todoId){
             else
                 alert(response.text)
         })
+}
+
+function shareTodo(todoId){
+    fetch("http://localhost:8080/todo?"+ new URLSearchParams({
+        "todoId":todoId,
+        "recipient":prompt('enter recipient username')
+    }),{
+        method:"PATCH"
+    }).then(r => r.json())
+        .then(r => alert(r.text))
 }

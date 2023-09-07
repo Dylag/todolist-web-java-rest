@@ -42,6 +42,7 @@ public class TodoService {
     }
 
     public String shareTodo(UUID sessionId, String recipientUsername, int todoId) {
+
         if(!checkTodoId(sessionId,todoId))
             return "wrong todoId";
 
@@ -49,8 +50,10 @@ public class TodoService {
         if(possibleRecipient.isEmpty())
             return "wrong recipientUsername";
 
+
+
         Todo sharedTodo = todoDB.findById(todoId).get();
-        Todo newTodo = new Todo(sharedTodo);
+        Todo newTodo = new Todo(sharedTodo,possibleRecipient.get().getId());
 
 
         todoDB.save(newTodo);
