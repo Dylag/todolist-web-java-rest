@@ -19,6 +19,7 @@
             <td class = "textColumn">text</td>
             <td class = "startDateColumn">start date</td>
             <td class = "endDateColumn">end date</td>
+            <td class= "deleteBtnColumn">delete</td>
         </tr>
     </table>
 
@@ -30,10 +31,24 @@
 
 <div class="column">
     <div id = 'userInterface'>
+
+        <label>input your todo text</label>
         <input type="text" id="userInput">
-        <button id="123" onclick="addToList()">add to list</button>
+
+        <p/>
+
+        <label>input start date</label>
         <input type="date" id ="startDatePicker">
+
+        <p/>
+
+        <label>input deadline</label>
         <input type="date" id = "endDatePicker">
+
+        <p/>
+
+        <button onclick="addToList()">add to list</button>
+
     </div>
 </div>
 

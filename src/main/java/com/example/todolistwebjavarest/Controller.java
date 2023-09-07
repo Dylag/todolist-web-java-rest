@@ -79,10 +79,13 @@ public class Controller {
 
     @DeleteMapping
     public JsonResponse deleteTodo(@CookieValue(name = "sessionId",defaultValue = "0")
-                                       String sessionId, @RequestParam(name= "id") int todoId){
+                                       String sessionId, @RequestParam(name= "todoId") int todoId){
         return new JsonResponse(todoService.deleteTodo(UUID.fromString(sessionId), todoId));
     }
 
-
+//    @PatchMapping
+//    public JsonResponse shareTodo(@CookieValue(name = "sessionId", defaultValue = "0" String sessionId,
+//                                    @RequestParam(name = "todoId") int todoId, )
+//    )
 
 }

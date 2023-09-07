@@ -23,33 +23,55 @@ function addToList(){
         .then(response => response.json())
         .then(json => {
             newTodo.id = json.id
-
+            let newRow = document.createElement('tr')
 
             let newIdCell = document.createElement('td')
             newIdCell.textContent = newTodo.id
             newIdCell.className = "idColumn"
+
             let newTxtCell = document.createElement('td')
             newTxtCell.textContent = newTodo.txt
             newTxtCell.className ="txtColumn"
+
             let newStartDateCell= document.createElement('td')
             newStartDateCell.textContent = newTodo.startdate
             newStartDateCell.className = "startDateColumn"
+
             let newEndDateCell = document.createElement('td')
             newEndDateCell.textContent = newTodo.enddate
             newEndDateCell.className = "endDateColumn"
 
+            let newDeleteBtnCell = document.createElement('td')
+            newDeleteBtnCell.className = "deleteBtnColumn"
 
-            let newRow = document.createElement('tr')
+            let newDeleteBtn = document.createElement('button')
+            newDeleteBtn.textContent = "---"
+            newDeleteBtn.className = "deleteBtnColumn"
+            newDeleteBtn.onclick = (()=>removeElement(newRow,newTodo.id))
+            newDeleteBtnCell.appendChild(newDeleteBtn)
+
             newRow.appendChild(newIdCell)
             newRow.appendChild(newTxtCell)
             newRow.appendChild(newStartDateCell)
             newRow.appendChild(newEndDateCell)
+            newRow.appendChild(newDeleteBtn)
 
             table.appendChild(newRow)
 
         })
 }
 
-function removeElement(element){
-    element.remove()
+function removeElement(element,todoId){
+    fetch("http://localhost:8080/todo?" + new URLSearchParams({
+        'todoId':todoId
+    }),{
+        method:"DELETE"
+    })
+        .then(r => r.json())
+        .then(response => {
+            if(response.text==='ok')
+                element.remove()
+            else
+                alert(response.text)
+        })
 }
