@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -88,6 +89,11 @@ public class Controller {
                                   @RequestParam(name = "todoId") int todoId,
                                   @RequestParam(name= "recipient") String recipientUsername){
         return new JsonResponse(todoService.shareTodo(UUID.fromString(sessionId), recipientUsername, todoId));
+    }
+
+    @GetMapping
+    public ArrayList<Todo> getTodos(@CookieValue(name= "sessionId", defaultValue ="0") String sessionId){
+        return todoService.getTodos(UUID.fromString(sessionId));
     }
 
 

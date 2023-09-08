@@ -2,9 +2,12 @@ package com.example.todolistwebjavarest.todo;
 
 
 import com.example.todolistwebjavarest.auth.UserRepository;
+import com.example.todolistwebjavarest.session.Session;
 import com.example.todolistwebjavarest.session.SessionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,7 +32,7 @@ public class TodoService {
         newTodo.setUserId(userId);
         todoDB.save(newTodo);
 
-        return todoDB.findLastTodoByUserId(userId).get();
+        return todoDB.findTodoByUserId(userId).get();
     }
 
     public String deleteTodo(UUID sessionId, int todoId){
@@ -63,5 +66,17 @@ public class TodoService {
 
     private boolean checkTodoId(UUID sessionId, int todoId){
         return sessionDB.findById(sessionId).get().getUserId() == todoDB.findById(todoId).get().getUserId();
+    }
+
+    public ArrayList<Todo> getTodos(UUID sessionId) {
+        Optional<Session> possibleSession = sessionDB.findById(sessionId);
+        if(possibleSession.isEmpty())
+            return null;
+
+
+        int userId = possibleSession.get().getUserId();
+
+        return todoDB.findAllByUserId(userId);
+
     }
 }

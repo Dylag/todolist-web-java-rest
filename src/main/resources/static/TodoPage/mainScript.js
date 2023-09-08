@@ -5,7 +5,7 @@ let endDatePicker = document.getElementById("endDatePicker")
 
 
 
-function addToList(){
+function addNewTodo(){
 
     let newTodo = {
         txt:userInput.value,
@@ -21,51 +21,7 @@ function addToList(){
         }
     })
         .then(response => response.json())
-        .then(json => {
-            newTodo.id = json.id
-            let newRow = document.createElement('tr')
-
-            let newIdCell = document.createElement('td')
-            newIdCell.textContent = newTodo.id
-            newIdCell.className = "idColumn"
-
-            let newTxtCell = document.createElement('td')
-            newTxtCell.textContent = newTodo.txt
-            newTxtCell.className ="txtColumn"
-
-            let newStartDateCell= document.createElement('td')
-            newStartDateCell.textContent = newTodo.startdate
-            newStartDateCell.className = "startDateColumn"
-
-            let newEndDateCell = document.createElement('td')
-            newEndDateCell.textContent = newTodo.enddate
-            newEndDateCell.className = "endDateColumn"
-
-            let newDeleteBtnCell = document.createElement('td')
-            newDeleteBtnCell.className = "deleteBtnColumn"
-            let newDeleteBtn = document.createElement('button')
-            newDeleteBtn.textContent = "---"
-            newDeleteBtn.onclick = (()=>removeElement(newRow,newTodo.id))
-            newDeleteBtnCell.appendChild(newDeleteBtn)
-
-            let newShareBtnCell = document.createElement("td")
-            newShareBtnCell.className = "shareBtnColumn"
-            let newShareBtn = document.createElement('button')
-            newShareBtn.textContent = "share with..."
-            newShareBtn.onclick = (() => shareTodo(newTodo.id))
-            newShareBtnCell.appendChild(newShareBtn)
-
-
-            newRow.appendChild(newIdCell)
-            newRow.appendChild(newTxtCell)
-            newRow.appendChild(newStartDateCell)
-            newRow.appendChild(newEndDateCell)
-            newRow.appendChild(newDeleteBtnCell)
-            newRow.appendChild(newShareBtnCell)
-
-            table.appendChild(newRow)
-
-        })
+        .then(newTodo => addToTable(newTodo))
 }
 
 function removeElement(element,todoId){
@@ -89,6 +45,70 @@ function shareTodo(todoId){
         "recipient":prompt('enter recipient username')
     }),{
         method:"PATCH"
-    }).then(r => r.json())
+    })
+        .then(r => r.json())
         .then(r => alert(r.text))
 }
+
+
+//on loading page
+fetch("http://localhost:8080/todo",{
+    method:"GET"
+})
+    .then(r => r.text().then(response => {
+        let array = JSON.parse(response)
+        console.log(array[0])
+        for(let todo of array) {
+            console.log(todo)
+            addToTable(todo)
+        }
+    }))
+
+
+function addToTable(newTodo){
+
+    console.log(newTodo)
+
+    let newRow = document.createElement('tr')
+
+    let newIdCell = document.createElement('td')
+    newIdCell.textContent = newTodo.id
+    newIdCell.className = "idColumn"
+
+    let newTxtCell = document.createElement('td')
+    newTxtCell.textContent = newTodo.txt
+    newTxtCell.className ="txtColumn"
+
+    let newStartDateCell= document.createElement('td')
+    newStartDateCell.textContent = newTodo.startdate
+    newStartDateCell.className = "startDateColumn"
+
+    let newEndDateCell = document.createElement('td')
+    newEndDateCell.textContent = newTodo.enddate
+    newEndDateCell.className = "endDateColumn"
+
+    let newDeleteBtnCell = document.createElement('td')
+    newDeleteBtnCell.className = "deleteBtnColumn"
+    let newDeleteBtn = document.createElement('button')
+    newDeleteBtn.textContent = "---"
+    newDeleteBtn.onclick = (()=>removeElement(newRow,newTodo.id))
+    newDeleteBtnCell.appendChild(newDeleteBtn)
+
+    let newShareBtnCell = document.createElement("td")
+    newShareBtnCell.className = "shareBtnColumn"
+    let newShareBtn = document.createElement('button')
+    newShareBtn.textContent = "share with..."
+    newShareBtn.onclick = (() => shareTodo(newTodo.id))
+    newShareBtnCell.appendChild(newShareBtn)
+
+
+    newRow.appendChild(newIdCell)
+    newRow.appendChild(newTxtCell)
+    newRow.appendChild(newStartDateCell)
+    newRow.appendChild(newEndDateCell)
+    newRow.appendChild(newDeleteBtnCell)
+    newRow.appendChild(newShareBtnCell)
+
+    table.appendChild(newRow)
+}
+
